@@ -1,0 +1,162 @@
+{
+  "distributed_world_size": 1,
+  "include_dirs": [
+    "transformer-crf"
+  ],
+  "task": {
+    "MyTaggingTask": {
+      "data": {
+        "Data": {
+          "source": {
+            "UDPOSDataSource": {
+              "column_mapping": {"text": "doc", "slots": "tags"},
+              "udpos_root": "/home/luning/dev/projects/transformer-crf/.data/udpos/en-ud-v2",
+              "fields": ["text", "slots"]
+            }
+          },
+          "batcher": {
+            "PoolingBatcher": {
+              "train_batch_size": 512,
+              "eval_batch_size": 512,
+              "test_batch_size": 512,
+              "pool_num_batches": 100,
+              "num_shuffled_pools": 4
+            }
+          }
+        }
+      },
+      "model": {
+        "decoder": {
+          "activation": "relu",
+          "dropout": 0.0,
+          "freeze": false,
+          "hidden_dims": [],
+          "layer_norm": false,
+          "load_path": null,
+          "out_dim": null,
+          "save_path": null,
+          "shared_module_key": null
+        },
+        "embedding": {
+          "cpu_only": false,
+          "delimiter": " ",
+          "embed_dim": 512,
+          "embedding_init_range": null,
+          "embedding_init_strategy": "random",
+          "export_input_names": [
+            "tokens_vals"
+          ],
+          "freeze": false,
+          "load_path": null,
+          "lowercase_tokens": true,
+          "min_freq": 1,
+          "mlp_layer_dims": [],
+          "padding_idx": null,
+          "pretrained_embeddings_path": "",
+          "save_path": null,
+          "shared_module_key": null,
+          "skip_header": true,
+          "vocab_file": "",
+          "vocab_from_all_data": false,
+          "vocab_from_pretrained_embeddings": false,
+          "vocab_from_train_data": true,
+          "vocab_size": 0
+        },
+        "inputs": {
+          "slots": {
+            "add_bos_token": false,
+            "add_eos_token": false,
+            "column": "tags",
+            "max_seq_len": null,
+            "use_eos_token_for_bos": false,
+            "tokenizer": {
+              "DoNothingTokenizer": {
+                "do_nothing": ""
+              }
+            },
+            "vocab": {
+              "build_from_data": true,
+              "size_from_data": 0,
+              "vocab_files": [
+
+              ]
+            },
+            "vocab_file_delimiter": " "
+          },
+          "tokens": {
+            "add_bos_token": false,
+            "add_eos_token": false,
+            "column": "doc",
+            "max_seq_len": null,
+            "use_eos_token_for_bos": false,
+            "tokenizer": {
+              "DoNothingTokenizer": {
+                "do_nothing": ""
+              }
+            },
+            "vocab": {
+              "build_from_data": true,
+              "size_from_data": 0,
+              "vocab_files": [
+              ]
+            },
+            "vocab_file_delimiter": " "
+          }
+        },
+        "output_layer": {
+          "CRFOutputLayer": {
+            "freeze": false,
+            "load_path": null,
+            "save_path": null,
+            "shared_module_key": null
+          }
+        },
+        "representation": {
+          "bidirectional": true,
+          "dropout": 0.9,
+          "freeze": false,
+          "load_path": null,
+          "lstm_dim": 512,
+          "num_layers": 1,
+          "pack_sequence": true,
+          "save_path": null,
+          "shared_module_key": null
+        }
+      },
+      "trainer": {
+        "TaskTrainer": {
+          "do_eval": true,
+          "early_stop_after": 0,
+          "epochs": 10000,
+          "fp16_args": {
+            "FP16OptimizerFairseq": {
+              "init_loss_scale": 128,
+              "min_loss_scale": 0.0001,
+              "scale_tolerance": 0.0,
+              "scale_window": null,
+              "threshold_loss_scale": null
+            }
+          },
+          "max_clip_norm": null,
+          "num_accumulated_batches": 1,
+          "num_batches_per_epoch": null,
+          "num_samples_to_log_progress": 1000,
+          "optimizer": {
+            "Adam": {
+              "eps": 1e-08,
+              "lr": 0.001,
+              "weight_decay": 1e-05
+            }
+          },
+          "report_train_metrics": true,
+          "scheduler": null,
+          "sparsifier": null,
+          "target_time_limit_seconds": null
+        }
+      }
+    }
+  },
+  "use_cuda_if_available": true,
+  "use_tensorboard": true,
+  "version": 18
+}
